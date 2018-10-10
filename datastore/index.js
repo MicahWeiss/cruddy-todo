@@ -9,8 +9,15 @@ var items = {};
 
 exports.create = (text, callback) => {
   var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+  // console.log('Creating file at', path.join(__dirname, 'data', id + '.txt'));
+  fs.writeFile(path.join(__dirname, 'data', id + '.txt'), text, (err) => { //Passes no tests, but looks like it runs.
+    if (err) {
+      throw err;
+    } else {
+      items[id] = text; 
+      callback(null, { id, text });
+    }
+  });
 };
 
 exports.readAll = (callback) => {
@@ -51,7 +58,7 @@ exports.delete = (id, callback) => {
   }
 };
 
-// Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
+// Config+Initialization code -- DO NOT MODIFY ///////////////////////////////
 
 exports.dataDir = path.join(__dirname, 'data');
 
