@@ -24,11 +24,11 @@ exports.create = (text, callback) => {
 };
 
 exports.readAll = (callback) => {
-  // var data = [];
-  // _.each(items, (text, id) => {
-  //   data.push({ id, text });
-  // });
-  // callback(null, data);
+  var data = [];
+  _.each(items, (text, id) => {
+    data.push({ id, text });
+  });
+  callback(null, data);
   // fs.readdir(path.join(exports.dataDir), 'utf8', (err, files) => {
   //   if (err){
   //     throw err;
@@ -37,21 +37,16 @@ exports.readAll = (callback) => {
   //     
   //   });
   // })
-  return;
+  // return;
 };
 
 exports.readOne = (id, callback) => {
-  // var text = items[id];
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
   fs.readFile(path.join(exports.dataDir, id + '.txt'), 'utf8', (err, data) => {
     if (err) {
-      throw err;
+      callback(err);
+    } else {
+      callback(null, {id, text: data});
     }
-    callback(null, {id, text: data});
   });
 };
 
