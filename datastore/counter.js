@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const sprintf = require('sprintf-js').sprintf;
 
-var counter = 0;
+// var counter = 0;
 
-// Private helper functions ////////////////////////////////////////////////////
+// Private helper functions /////////////////////////////////////////////////////
 
 // Zero padded numbers can only be represented as strings.
 // If you don't know what a zero-padded number is, read the
@@ -37,24 +37,19 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
-
 exports.getNextUniqueId = (callback) => {
-  readCounter((err, data) => {
+  readCounter((err, counter) => {
     if (err) {
-      callback(err, data);
-    } else {
-      //console.log('count in readCounter: ', data); 
-      data++; 
-      counter = data
-      writeCounter(data, callback)
+      throw err;
     }
+    writeCounter(counter + 1, (err, counterString) => {
+      if (err) {
+        throw err;
+      }
+      callback(null, counterString);
+    });
   });
-
-  return zeroPaddedNumber(counter); //Read the new counter
 };
-
-
-
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
 
 exports.counterFile = path.join(__dirname, 'counter.txt');
