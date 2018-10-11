@@ -41,7 +41,7 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = (callback) => {
   readCounter((err, data) => {
     if (err) {
-      throw err;
+      callback(err, data);
     } else {
       //console.log('count in readCounter: ', data); 
       data++; 

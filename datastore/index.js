@@ -8,13 +8,14 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  // console.log('Creating file at', path.join(__dirname, 'data', id + '.txt'));
-  fs.writeFile(path.join(__dirname, 'data', id + '.txt'), text, (err) => { //Passes no tests, but looks like it runs.
+  var id = counter.getNextUniqueId(/* declare some fuction */);
+  console.log('Creating file at', path.join(exports.dataDir, id + '.txt'));
+  fs.writeFile(path.join(exports.dataDir,  id + '.txt'), text, (err, data) => { //Passes no tests, but looks like it runs.
     if (err) {
-      throw err;
+      callback(err, data)
     } else {
       items[id] = text; 
+      console.log('ID: ', id)
       callback(null, { id, text });
     }
   });
