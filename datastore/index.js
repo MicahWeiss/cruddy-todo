@@ -3,39 +3,56 @@ const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
 
-var items = {};
+// var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId(/* declare some fuction */);
-  console.log('Creating file at', path.join(exports.dataDir, id + '.txt'));
-  fs.writeFile(path.join(exports.dataDir,  id + '.txt'), text, (err, data) => { //Passes no tests, but looks like it runs.
+  counter.getNextUniqueId((err, id) => {
     if (err) {
-      callback(err, data)
+      throw err;
     } else {
-      items[id] = text; 
-      console.log('ID: ', id)
-      callback(null, { id, text });
+      fs.writeFile(path.join(exports.dataDir, id + '.txt'), text, (err) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, { id, text });
+        }
+      });
     }
   });
 };
 
 exports.readAll = (callback) => {
-  var data = [];
-  _.each(items, (text, id) => {
-    data.push({ id, text });
-  });
-  callback(null, data);
+  // var data = [];
+  // _.each(items, (text, id) => {
+  //   data.push({ id, text });
+  // });
+  // callback(null, data);
+  // fs.readdir(path.join(exports.dataDir), 'utf8', (err, files) => {
+  //   if (err){
+  //     throw err;
+  //   }
+  //   files.map((file) => {
+  //     
+  //   });
+  // })
+  return;
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
+  fs.readFile(path.join(exports.dataDir, id + '.txt'), 'utf8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    callback(null, {id, text: data});
+  });
 };
 
 exports.update = (id, text, callback) => {
